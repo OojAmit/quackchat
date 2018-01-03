@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/OojAmit/quackchat/issues"
   },
-  "homepage": "https://github.com/OojAmit/quackchat#readme"
+  "homepage": "https://github.com/OojAmit/quackchat#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
