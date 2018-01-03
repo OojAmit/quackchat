@@ -1,0 +1,19 @@
+{
+  "name": "quackchat",
+  "version": "1.0.0",
+  "description": "Quack Quack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OojAmit/quackchat.git"
+  },
+  "author": "Ooj Amit <oojamit@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OojAmit/quackchat/issues"
+  },
+  "homepage": "https://github.com/OojAmit/quackchat#readme"
+}
