@@ -9,6 +9,7 @@ const port = process.env.PORT || 10004;
 
 var app = express();
 
+app.use(express.static('public'))
 app.set('view engine', 'ejs')
 
 app.use(cookieSession({
