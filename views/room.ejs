@@ -30,7 +30,7 @@
         margin-top: 0px;
         padding-top: 15px;
         min-width: 300px;
-        margin-right: 0.5%;
+        margin-right: 5px;
       }
       #chat{
         height: 100%;
@@ -70,9 +70,16 @@
           switch (direction) {
             case 'right':
               $('#members').removeClass('hide-on-med-and-down');
+              $('#chat').addClass('hide-on-small-only');
+              if ($(window).width() < 600) {
+                $('#members').css('margin-right', '0px');
+                $('#members').css('max-width', '1000px');
+                $('#members').css('width', '100%');
+              }
               break;
             case 'left':
               $('#members').addClass('hide-on-med-and-down');
+              $('#chat').removeClass('hide-on-small-only');
               break;
           }
         }
