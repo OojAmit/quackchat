@@ -42,15 +42,39 @@
       }
       #members h3{
         margin: 0px;
+        margin-bottom: 25px;
+      }
+      li.member{
+        padding-left: 15px;
+      }
+      li p.member-username{
+        font-size: 25px;
+        margin: 0px;
+        display: inline-block;
+        position: relative;
+        bottom: 5px;
+      }
+      li p.member-status{
+        font-size: 18px;
+        margin: 0px;
+        position: relative;
+        bottom: 12px;
+      }
+      li img.member-thumbnail{
+        margin-right: 10px;
       }
     </style>
   </head>
   <body>
     <div id="quackchat" class="z-depth-1">
-      <ul id="members" class="white-text z-depth-1 center-align hide-on-med-and-down">
-        <h3>Members</h3>
+      <ul id="members" class="white-text z-depth-1 hide-on-med-and-down">
+        <h3 class="center-align">Members</h3>
         <% for(member of members){ %>
-          <li class="member"><%= member.username %></li>
+          <li class="member">
+            <img src="<%= member.thumbnail %>" alt="Member thumbnail" class="member-thumbnail left">
+            <p class="text-flow member-username"><%= member.username %></p> <br>
+            <p class="text-flow member-status">Online</p>
+          </li>
         <% } %>
       </ul>
       <div id="chat" class="z-depth-1">
