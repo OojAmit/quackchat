@@ -1,21 +1,82 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
   <head>
-    <title>QuackChat</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <title>QuackChat</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <style media="screen">
+      :root{
+        --orange: #FFC680;
+        --yellow: #FDD264;
+        --tangerine: #F56B39;
+        --bergundy: #670305;
+      }
+      #quackchat{
+        margin: 5px;
+        height: 100%;
+        background-color: var(--tangerine);
+        padding: 10px;
+        display: flex;
+      }
+      #members{
+        height: 100%;
+        background-color: var(--yellow);
+        width: 30%;
+        max-width: 380px;
+        margin-top: 0px;
+        padding-top: 15px;
+        min-width: 300px;
+        margin-right: 0.5%;
+      }
+      #chat{
+        height: 100%;
+        background-color: white;
+        width: 70%;
+        margin-top: 0px;
+        flex-grow: 100;
+        background-color: var(--yellow);
+      }
+      #members h3{
+        margin: 0px;
+      }
+    </style>
   </head>
   <body>
-    <h1>Hi <%= user.username %></h1>
+    <div id="quackchat" class="z-depth-1">
+      <ul id="members" class="white-text z-depth-1 center-align hide-on-med-and-down">
+        <h3>Members</h3>
+        <% for(member of members){ %>
+          <li class="member"><%= member.username %></li>
+        <% } %>
+      </ul>
+      <div id="chat" class="z-depth-1">
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      $('html').css('height', ($(window).height() - 10) + 'px');
+      $('body').css('height', ($(window).height() - 10) + 'px');
+
+      $(window).swipe({
+        swipe: (event, direction, distance, duration, fingerCount) => {
+          switch (direction) {
+            case 'right':
+              $('#members').removeClass('hide-on-med-and-down');
+              break;
+            case 'left':
+              $('#members').addClass('hide-on-med-and-down');
+              break;
+          }
+        }
+      })
+    </script>
   </body>
 </html>

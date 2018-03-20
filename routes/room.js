@@ -1,4 +1,5 @@
 const Router = require('express').Router();
+const User = require('../models/user');
 
 const authCheck = (req, res, next) => {
   if(!req.user){
@@ -10,7 +11,9 @@ const authCheck = (req, res, next) => {
 
 
 Router.get('/', authCheck, (req, res) => {
-  res.render('room', {user: req.user})
+  User.find({}, (err, users) => {
+    res.render('room', {user: req.user, members: users})
+  })
 })
 
 
