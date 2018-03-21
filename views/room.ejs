@@ -31,6 +31,7 @@
         padding-top: 15px;
         min-width: 300px;
         margin-right: 5px;
+        overflow-y: scroll;
       }
       #chat{
         height: 100%;
@@ -42,10 +43,19 @@
       }
       #members h3{
         margin: 0px;
-        margin-bottom: 25px;
+        margin-bottom: 10px;
+        color: white;
       }
       li.member{
+        padding-top: 10px;
+        padding-bottom: 10px;
         padding-left: 15px;
+        height: 70px;
+        margin-bottom: 8px;
+        background-color: var(--tangerine);
+        color: white;
+        margin-left: 4px;
+        margin-right: 4px;
       }
       li p.member-username{
         font-size: 25px;
@@ -63,17 +73,27 @@
       li img.member-thumbnail{
         margin-right: 10px;
       }
+      #members::-webkit-scrollbar {
+        width: 4px;
+      }
+      #members::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px var(--tangerine);
+      }
+      #members::-webkit-scrollbar-thumb {
+        background-color: var(--bergundy);
+      }
     </style>
   </head>
   <body>
     <div id="quackchat" class="z-depth-1">
-      <ul id="members" class="white-text z-depth-1 hide-on-med-and-down">
-        <h3 class="center-align">Members</h3>
+      <ul id="members" class="z-depth-1 hide-on-med-and-down">
+        <h3 class="center-align">MEMBERS</h3>
         <% for(member of members){ %>
-          <li class="member">
+          <li class="member z-depth-1">
             <img src="<%= member.thumbnail %>" alt="Member thumbnail" class="member-thumbnail left">
-            <p class="text-flow member-username"><%= member.username %></p> <br>
-            <p class="text-flow member-status">Online</p>
+              <p class="text-flow member-username"><%= member.username %></p>
+              <br>
+              <p class="text-flow member-status"><%= member.email.substring(0, member.email.indexOf('@')) %></p>
           </li>
         <% } %>
       </ul>
