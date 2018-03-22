@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const keys = require('./config/keys');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
+const socket = require('socket.io');
 
 const port = process.env.PORT || 10004;
 
@@ -13,7 +14,7 @@ app.use(express.static('public'))
 app.set('view engine', 'ejs')
 
 app.use(cookieSession({
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
   keys: [keys.session.cookieKey]
 }))
 
@@ -28,4 +29,10 @@ app.use(require('./routes/room'))
 
 var server = app.listen(port, () => {
   console.log(`Listening at port ${port}`);
+})
+
+var io = socket(server);
+
+io.on('connection', socket => {
+  console.log(socket.id);
 })
