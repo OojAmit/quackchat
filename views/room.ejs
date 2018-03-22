@@ -35,11 +35,11 @@
       }
       #chat{
         height: 100%;
-        background-color: white;
+        background-color: var(--yellow);
         width: 70%;
         margin-top: 0px;
         flex-grow: 100;
-        background-color: var(--yellow);
+        position: relative;
       }
       #members h3{
         margin: 0px;
@@ -82,6 +82,27 @@
       #members::-webkit-scrollbar-thumb {
         background-color: var(--bergundy);
       }
+      #message{
+        position: absolute;
+        bottom: 0;
+        margin: 4px;
+        height: 50px;
+        border: none;
+        background: var(--tangerine);
+        padding: 5px;
+        padding-left: 15px;
+        color: white;
+        font-size: 20px;
+      }
+      ::-webkit-input-placeholder { color: white; font-size: 20px;}
+      ::-moz-placeholder { color: white; font-size: 20px;}
+      :-ms-input-placeholder { color: white; font-size: 20px;}
+      :-moz-placeholder { color: white; font-size: 20px;}
+      #messages{
+        /* border: 2px solid var(--tangerine); */
+        margin: 4px;
+        /* background: var(--tangerine); */
+      }
     </style>
   </head>
   <body>
@@ -98,7 +119,8 @@
         <% } %>
       </ul>
       <div id="chat" class="z-depth-1">
-
+        <div id="messages"></div>
+        <input type="text" name="message" id="message" placeholder="Quack here" class="browser-default z-depth-1">
       </div>
     </div>
 
@@ -108,6 +130,9 @@
     <script type="text/javascript">
       $('html').css('height', ($(window).height() - 10) + 'px');
       $('body').css('height', ($(window).height() - 10) + 'px');
+
+      $('#message').css('width', ($('#chat').width() - ($('#message').css('margin-left').substring(0, $('#message').css('margin-left').indexOf('p'))*2)) + 'px');
+      $('#messages').css('height', ($('#chat').height() - ($('#message').height() + 24)) + 'px');
 
       $(window).swipe({
         swipe: (event, direction, distance, duration, fingerCount) => {
