@@ -5,6 +5,7 @@ const keys = require('./config/keys');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const socket = require('socket.io');
+const Message = require('./models/message');
 
 const port = process.env.PORT || 10004;
 
@@ -34,5 +35,8 @@ var server = app.listen(port, () => {
 var io = socket(server);
 
 io.on('connection', socket => {
-  console.log(socket.id);
+  socket.on('message', data => {
+    io.sockets.emit('message', data);
+    new Message(data).save();
+  })
 })

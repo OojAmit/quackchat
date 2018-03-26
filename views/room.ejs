@@ -73,16 +73,11 @@
       li img.member-thumbnail{
         margin-right: 10px;
       }
-      #members::-webkit-scrollbar {
-        width: 4px;
-      }
-      #members::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px var(--tangerine);
-      }
-      #members::-webkit-scrollbar-thumb {
-        background-color: var(--bergundy);
-      }
-      #message{
+      #members::-webkit-scrollbar { width: 4px; }
+      #members::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px var(--tangerine); }
+      #members::-webkit-scrollbar-thumb { background-color: var(--bergundy); }
+
+      #message-box{
         position: absolute;
         bottom: 0;
         margin: 4px;
@@ -94,14 +89,18 @@
         color: white;
         font-size: 20px;
       }
+
       ::-webkit-input-placeholder { color: white; font-size: 20px;}
       ::-moz-placeholder { color: white; font-size: 20px;}
       :-ms-input-placeholder { color: white; font-size: 20px;}
       :-moz-placeholder { color: white; font-size: 20px;}
       #messages{
-        /* border: 2px solid var(--tangerine); */
         margin: 4px;
-        /* background: var(--tangerine); */
+        color: white;
+        font-size: 20px;
+      }
+      .message{
+        word-wrap: break-word;
       }
     </style>
   </head>
@@ -119,8 +118,8 @@
         <% } %>
       </ul>
       <div id="chat" class="z-depth-1">
-        <div id="messages"></div>
-        <input type="text" name="message" id="message" placeholder="Quack here" class="browser-default z-depth-1">
+        <ul id="messages"></ul>
+        <input type="text" name="message" id="message-box" placeholder="Quack here" class="browser-default z-depth-1">
       </div>
     </div>
 
@@ -131,11 +130,29 @@
     <script type="text/javascript">
       var socket = io.connect();
 
+      socket.on('message', data => {
+        $('#messages').append(`<li class="message"><b>${data.sender}:</b> ${data.msg}</li>`);
+        $('#messages').scrollTop($('#messages')[0].scrollHeight);
+      })
+
+      $('input').keyup(function(e){
+        if (e.key === "Enter") {
+          if ($(this).val() != '') {
+            socket.emit('message', {
+              msg: $(this).val(),
+              sender: <%- JSON.stringify(user.username) %>,
+              timestamp: + new Date()
+            });
+            $('input').val('');
+          }
+        }
+      })
+
       $('html').css('height', ($(window).height() - 10) + 'px');
       $('body').css('height', ($(window).height() - 10) + 'px');
 
-      $('#message').css('width', ($('#chat').width() - ($('#message').css('margin-left').substring(0, $('#message').css('margin-left').indexOf('p'))*2)) + 'px');
-      $('#messages').css('height', ($('#chat').height() - ($('#message').height() + 24)) + 'px');
+      $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
+      $('#messages').css('height', ($('#chat').height() - ($('#message-box').height() + 24)) + 'px');
 
       $(window).swipe({
         swipe: (event, direction, distance, duration, fingerCount) => {
