@@ -36,7 +36,7 @@ var io = socket(server);
 
 io.on('connection', socket => {
   socket.on('message', data => {
-    io.sockets.emit('message', data);
+    socket.broadcast.emit('message', data);
     new Message(data).save();
   })
 })
