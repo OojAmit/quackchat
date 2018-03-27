@@ -272,7 +272,7 @@
 
       $('#chat').css('width', $('#members').width());
 
-      $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
+      $('#message-box').css('width', ($('#chat').width() - 8) + 'px');
       $('#messages').css('height', ($('#chat').height() - ($('#message-box').height() + 24)) + 'px');
 
       $(window).swipe({
@@ -281,7 +281,7 @@
             case 'right':
               $('#members').removeClass('hide-on-med-and-down');
               $('#chat').addClass('hide-on-small-only');
-              $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
+              $('#message-box').css('width', ($('#chat').width() - 8) + 'px');
               if ($(window).width() < 600) {
                 $('#members').css('margin-right', '0px');
                 $('#members').css('max-width', '100%');
@@ -292,7 +292,7 @@
             case 'left':
               $('#members').addClass('hide-on-med-and-down');
               $('#chat').removeClass('hide-on-small-only');
-              $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
+              $('#message-box').css('width', ($('#chat').width() - 8) + 'px');
               break;
           }
         }
