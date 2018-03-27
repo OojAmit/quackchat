@@ -194,8 +194,10 @@
             newString.push('&#x27');
           } else if (char === '/') {
             newString.push('&#x2F;');
+          } else if (char === ' ') {
+            newString.push('&nbsp;');
           } else {
-            newString.push(char);
+            newString.push(char)
           }
         }
         return newString.join('');
@@ -243,7 +245,7 @@
 
       $('input').keyup(function(e){
         if (e.key === "Enter") {
-          if ($(this).val() != '') {
+          if (/\S/.test($(this).val())) {
             socket.emit('message', {
               msg: $(this).val(),
               sender: user._id,
