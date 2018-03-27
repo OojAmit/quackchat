@@ -157,9 +157,9 @@
         <% for(member of members){ %>
           <li class="member z-depth-1">
             <img src="<%= member.thumbnail %>" alt="Member thumbnail" class="member-thumbnail left">
-              <p class="text-flow member-username"><%= member.username %></p>
+            <p class="text-flow member-username"><%= member.username %></p>
               <br>
-              <p class="text-flow member-email"><%= member.email.substring(0, member.email.indexOf('@')) %></p>
+            <p class="text-flow member-email"><%= member.email.substring(0, member.email.indexOf('@')) %></p>
           </li>
         <% } %>
       </ul>
@@ -245,6 +245,8 @@
       $('html').css('height', ($(window).height() - 10) + 'px');
       $('body').css('height', ($(window).height() - 10) + 'px');
 
+      $('#chat').css('width', $('#members').width());
+
       $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
       $('#messages').css('height', ($('#chat').height() - ($('#message-box').height() + 24)) + 'px');
 
@@ -254,15 +256,18 @@
             case 'right':
               $('#members').removeClass('hide-on-med-and-down');
               $('#chat').addClass('hide-on-small-only');
+              $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
               if ($(window).width() < 600) {
                 $('#members').css('margin-right', '0px');
-                $('#members').css('max-width', '1000px');
+                $('#members').css('max-width', '100%');
                 $('#members').css('width', '100%');
               }
+              $('#messages').scrollTop($('#messages')[0].scrollHeight);
               break;
             case 'left':
               $('#members').addClass('hide-on-med-and-down');
               $('#chat').removeClass('hide-on-small-only');
+              $('#message-box').css('width', ($('#chat').width() - ($('#message-box').css('margin-left').substring(0, $('#message-box').css('margin-left').indexOf('p'))*2)) + 'px');
               break;
           }
         }
