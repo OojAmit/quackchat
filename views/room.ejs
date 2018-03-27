@@ -105,12 +105,12 @@
 
       li{
         margin: 5px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
       }
       .thumbnail{
         width: 40px;
       }
-      .message{
+      .message, .mine{
         word-wrap: break-word;
         padding: 5px;
       }
@@ -120,7 +120,6 @@
       }
       .mine{
         text-align: right;
-        padding: 5px;
       }
       .mine .thumbnail{
         float: right;
@@ -131,18 +130,23 @@
         font-size: 20px;
         padding: 5px;
         position: relative;
-        top: 24px;
+        top: -24px;
+        margin: 0px;
+        max-width: 80%;
+        display: inline-block;
       }
       .mine .msg{
-        right: -54px;
+        right: 45px;
+        text-align: left;
       }
       .username{
         font-size: 15px;
         position: relative;
-        bottom: 8px;
+        bottom: 4px;
+        margin: 0px;
       }
       .message .msg{
-        left: -54px;
+        left: 45px;
       }
     </style>
   </head>
@@ -181,17 +185,19 @@
           if (message.sender != user._id) {
             $('#messages').append(`
               <li class="message">
-                <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail z-depth-1"/>
-                <span class="username">${sender.username}</span>
-                <span class="msg z-depth-1">${message.msg}</span>
+                <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail"/>
+                <p class="username">${sender.username}</p>
+                <br>
+                <p class="msg z-depth-1">${message.msg}</p>
               </li>
             `);
           } else {
             $('#messages').append(`
               <li class="mine">
-                <img src="${sender.thumbnail}" alt="Your thumbnail" class="thumbnail z-depth-1"/>
-                <span class="msg z-depth-1">${message.msg}</span>
-                <span class="username">You</span>
+                <img src="${sender.thumbnail}" alt="Your thumbnail" class="thumbnail"/>
+                <p class="username">You</p>
+                <br>
+                <p class="msg z-depth-1">${message.msg}</p>
               </li>
             `);
           }
@@ -203,9 +209,10 @@
         let sender = members.find(o => o._id === data.sender);
         $('#messages').append(`
           <li class="message">
-            <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail z-depth-1"/>
-            <span class="username">${sender.username}</span>
-            <span class="msg z-depth-1">${data.msg}</span>
+            <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail"/>
+            <p class="username">${sender.username}</p>
+            <br>
+            <p class="msg z-depth-1">${data.msg}</p>
           </li>
         `);
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
@@ -222,9 +229,10 @@
 
             $('#messages').append(`
               <li class="mine">
-                <img src="${user.thumbnail}" alt="Your thumbnail" class="thumbnail z-depth-1"/>
-                <span class="msg z-depth-1">${$(this).val()}</span>
-                <span class="username">You</span>
+                <img src="${user.thumbnail}" alt="Your thumbnail" class="thumbnail"/>
+                <p class="username">You</p>
+                <br>
+                <p class="msg z-depth-1">${$(this).val()}</p>
               </li>
             `);
             $('#messages').scrollTop($('#messages')[0].scrollHeight);
