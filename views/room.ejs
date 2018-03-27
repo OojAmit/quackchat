@@ -149,6 +149,15 @@
       .message .msg{
         left: 45px;
       }
+      .timestamp{
+        font-size: 12px;
+      }
+      .mine .timestamp{
+        margin-left: 5px;
+      }
+      .message .timestamp{
+        margin-right: 5px;
+      }
     </style>
   </head>
   <body>
@@ -203,6 +212,16 @@
         return newString.join('');
       }
 
+      function diff(timestamp){
+        let diff = +new Date() - timestamp;
+        if      (diff < 1000)            { return 'Now' }
+        else if (diff < 1000*60)         { return Math.round(diff/1000) + 's' }
+        else if (diff < 1000*60*60)      { return Math.round(diff/(1000*60)) + 'm' }
+        else if (diff < 1000*60*60*24)   { return Math.round(diff/(1000*60*60)) + 'h' }
+        else if (diff < 1000*60*60*24*7) { return Math.round(diff/(1000*60*60*24)) + 'd' }
+        else                             { return 'The 18 hundreds' }
+      }
+
       $.get('/messages', messages => {
         for(message of messages){
           let sender = members.find(o => o._id === message.sender);
@@ -211,7 +230,7 @@
             $('#messages').append(`
               <li class="message">
                 <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail"/>
-                <p class="username">${sender.username}</p>
+                <p class="username">${sender.username} <span class="timestamp">${diff(message.timestamp)}</span></p>
                 <br>
                 <p class="msg z-depth-1">${escape(message.msg)}</p>
               </li>
@@ -220,7 +239,7 @@
             $('#messages').append(`
               <li class="mine">
                 <img src="${sender.thumbnail}" alt="Your thumbnail" class="thumbnail"/>
-                <p class="username">You</p>
+                <p class="username">You <span class="timestamp">${diff(message.timestamp)}</span></p>
                 <br>
                 <p class="msg z-depth-1">${escape(message.msg)}</p>
               </li>
@@ -235,7 +254,7 @@
         $('#messages').append(`
           <li class="message">
             <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail"/>
-            <p class="username">${sender.username}</p>
+            <p class="username">${sender.username} <span class="timestamp">${diff(data.timestamp)}</span></p>
             <br>
             <p class="msg z-depth-1">${escape(data.msg)}</p>
           </li>
@@ -246,16 +265,17 @@
       $('input').keyup(function(e){
         if (e.key === "Enter") {
           if (/\S/.test($(this).val())) {
+            let timestamp = + new Date();
             socket.emit('message', {
               msg: $(this).val(),
               sender: user._id,
-              timestamp: + new Date()
+              timestamp: timestamp
             });
 
             $('#messages').append(`
               <li class="mine">
                 <img src="${user.thumbnail}" alt="Your thumbnail" class="thumbnail"/>
-                <p class="username">You</p>
+                <p class="username">You <span class="timestamp">${diff(timestamp)}</span></p>
                 <br>
                 <p class="msg z-depth-1">${escape($(this).val())}</p>
               </li>
