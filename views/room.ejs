@@ -88,6 +88,7 @@
         padding-left: 15px;
         color: white;
         font-size: 20px;
+        z-index: 1;
       }
 
       ::-webkit-input-placeholder { color: white; font-size: 20px;}
@@ -178,6 +179,28 @@
       var members = <%- JSON.stringify(members) %>
       var user = <%- JSON.stringify(user) %>
 
+      function escape(string){
+        let newString = [];
+        for(char of string){
+          if (char === '&') {
+            newString.push('&amp;');
+          } else if (char === '<') {
+            newString.push('&lt;');
+          } else if (char === '>') {
+            newString.push('&gt;');
+          } else if (char === '"') {
+            newString.push('&quot;');
+          } else if (char === "'") {
+            newString.push('&#x27');
+          } else if (char === '/') {
+            newString.push('&#x2F;');
+          } else {
+            newString.push(char);
+          }
+        }
+        return newString.join('');
+      }
+
       $.get('/messages', messages => {
         for(message of messages){
           let sender = members.find(o => o._id === message.sender);
@@ -188,7 +211,7 @@
                 <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail"/>
                 <p class="username">${sender.username}</p>
                 <br>
-                <p class="msg z-depth-1">${message.msg}</p>
+                <p class="msg z-depth-1">${escape(message.msg)}</p>
               </li>
             `);
           } else {
@@ -197,7 +220,7 @@
                 <img src="${sender.thumbnail}" alt="Your thumbnail" class="thumbnail"/>
                 <p class="username">You</p>
                 <br>
-                <p class="msg z-depth-1">${message.msg}</p>
+                <p class="msg z-depth-1">${escape(message.msg)}</p>
               </li>
             `);
           }
@@ -212,7 +235,7 @@
             <img src="${sender.thumbnail}" alt="Sender thumbnail" class="thumbnail"/>
             <p class="username">${sender.username}</p>
             <br>
-            <p class="msg z-depth-1">${data.msg}</p>
+            <p class="msg z-depth-1">${escape(data.msg)}</p>
           </li>
         `);
         $('#messages').scrollTop($('#messages')[0].scrollHeight);
@@ -232,7 +255,7 @@
                 <img src="${user.thumbnail}" alt="Your thumbnail" class="thumbnail"/>
                 <p class="username">You</p>
                 <br>
-                <p class="msg z-depth-1">${$(this).val()}</p>
+                <p class="msg z-depth-1">${escape($(this).val())}</p>
               </li>
             `);
             $('#messages').scrollTop($('#messages')[0].scrollHeight);
