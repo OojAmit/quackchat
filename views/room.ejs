@@ -90,6 +90,9 @@
         font-size: 20px;
         z-index: 1;
       }
+      #message-box:focus{
+        outline: none;
+      }
 
       ::-webkit-input-placeholder { color: white; font-size: 20px;}
       ::-moz-placeholder { color: white; font-size: 20px;}
@@ -175,7 +178,7 @@
       </ul>
       <div id="chat" class="z-depth-1">
         <ul id="messages"></ul>
-        <input type="text" id="message-box" placeholder="Quack here" class="browser-default z-depth-1">
+        <input type="text" id="message-box" placeholder="Quack here" class="browser-default z-depth-1" autofocus>
       </div>
     </div>
 
@@ -214,12 +217,24 @@
 
       function diff(timestamp){
         let diff = +new Date() - timestamp;
-        if      (diff < 1000)            { return 'Now' }
-        else if (diff < 1000*60)         { return Math.round(diff/1000) + 's' }
-        else if (diff < 1000*60*60)      { return Math.round(diff/(1000*60)) + 'm' }
-        else if (diff < 1000*60*60*24)   { return Math.round(diff/(1000*60*60)) + 'h' }
-        else if (diff < 1000*60*60*24*7) { return Math.round(diff/(1000*60*60*24)) + 'd' }
-        else                             { return 'The 18 hundreds' }
+        if      (diff < 1000)                    { return 'Now' }
+        else if (diff < 1000*60)                 { return Math.round(diff/1000) + 's' }
+        else if (diff < 1000*60*60)              { return Math.round(diff/(1000*60)) + 'm' }
+        else if (diff < 1000*60*60*24)           { return Math.round(diff/(1000*60*60)) + 'h' }
+        else if (diff < 1000*60*60*24*7)         { return Math.round(diff/(1000*60*60*24)) + 'd' }
+        else {
+          let a = new Date(timestamp);
+          let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+          let year = a.getFullYear(),
+              month = months[a.getMonth()],
+              date = a.getDate(),
+              hour = a.getHours(),
+              min = a.getMinutes(),
+              sec = a.getSeconds();
+
+          return date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
+        }
       }
 
       $.get('/messages', messages => {
