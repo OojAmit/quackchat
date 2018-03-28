@@ -6,6 +6,7 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 const socket = require('socket.io');
 const Message = require('./models/message');
+const User = require('./models/user');
 
 const port = process.env.PORT || 10004;
 
@@ -39,4 +40,7 @@ io.on('connection', socket => {
     socket.broadcast.emit('message', data);
     new Message(data).save();
   })
+
+  socket.on('online', id => User.findByIdAndUpdate(id, {online: true}, (err, user) => io.sockets.emit('online', user._id)));
+  socket.on('offline', id => User.findByIdAndUpdate(id, {online: false}, (err, user) => io.sockets.emit('offline', user._id)));
 })

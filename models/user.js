@@ -5,7 +5,11 @@ const userSchema = new Schema({
   username: String,
   email: String,
   googleID: String,
-  thumbnail: String
+  thumbnail: String,
+  online: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const User = mongoose.model('user', userSchema)

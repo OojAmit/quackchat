@@ -14,6 +14,8 @@
         --yellow: #FDD264;
         --tangerine: #F56B39;
         --bergundy: #670305;
+        --green: #6AF53A;
+        --red: #EB2A2A;
       }
       #quackchat{
         margin: 5px;
@@ -110,6 +112,7 @@
       li{
         margin: 5px;
         margin-bottom: 20px;
+        position: relative;
       }
       .thumbnail{
         width: 40px;
@@ -161,20 +164,18 @@
       .message .timestamp{
         margin-right: 5px;
       }
+      .online{
+        font-size: 20px;
+        position: absolute;
+        right: 8px;
+        bottom: 1px;
+      }
     </style>
   </head>
   <body>
     <div id="quackchat" class="z-depth-1">
       <ul id="members" class="z-depth-1 hide-on-med-and-down">
         <h3 class="center-align">MEMBERS</h3>
-        <% for(member of members){ %>
-          <li class="member z-depth-1">
-            <img src="<%= member.thumbnail %>" alt="Member thumbnail" class="member-thumbnail left">
-            <p class="text-flow member-username"><%= member.username %></p>
-              <br>
-            <p class="text-flow member-email"><%= member.email.substring(0, member.email.indexOf('@')) %></p>
-          </li>
-        <% } %>
       </ul>
       <div id="chat" class="z-depth-1">
         <ul id="messages"></ul>
@@ -190,6 +191,22 @@
       var socket = io.connect();
       var members = <%- JSON.stringify(members) %>
       var user = <%- JSON.stringify(user) %>
+
+      socket.emit('online', user._id);
+      window.addEventListener('visibilitychange', () => {
+        switch (document.visibilityState) {
+          case 'visible':
+            socket.emit('online', user._id);
+            break;
+          case 'hidden':
+            socket.emit('offline', user._id);
+            break;
+        }
+      })
+      window.onbeforeunload = () => {
+        socket.emit('offline', user._id);
+        return null;
+      }
 
       function escape(string){
         let newString = [];
@@ -235,6 +252,23 @@
 
           return date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
         }
+      }
+
+      function you(member){
+        return (member._id === user._id) ? 'You' : member.username;
+      }
+
+      for(member of members){
+        $('#members').append(`
+          <li id="${member._id}" class="member z-depth-1">
+            <img src="${member.thumbnail}" alt="Member thumbnail" class="member-thumbnail left">
+            <p class="text-flow member-username">${you(member)}</p>
+            <span class="online">&#9632;</span>
+              <br>
+            <p class="text-flow member-email">${member.email.substring(0, member.email.indexOf('@'))}</p>
+          </li>
+        `);
+        $(`#${member._id} .online`).css('color', (member.online) ? 'var(--green)' : 'var(--red)');
       }
 
       $.get('/messages', messages => {
@@ -301,6 +335,9 @@
           }
         }
       })
+
+      socket.on('online', userID => $(`#${userID} .online`).css('color', 'var(--green)'));
+      socket.on('offline', userID => $(`#${userID} .online`).css('color', 'var(--red)'));
 
       $('html').css('height', ($(window).height() - 10) + 'px');
       $('body').css('height', ($(window).height() - 10) + 'px');
