@@ -1,0 +1,15 @@
+{
+  "name": "QuackChat",
+  "short_name": "QuackChat",
+  "description": "A chat-app for all you people to Quack through",
+  "theme_color": "#f56b39",
+  "background_color": "#fdd264",
+  "display": "browser",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [{
+    "src": "public/favicon.ico",
+    "type": "image/ico"
+  }],
+  "gcm_sender_id": "103953800507"
+}

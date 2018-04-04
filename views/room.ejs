@@ -7,6 +7,7 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="manifest" href="manifest.json">
 
     <style media="screen">
       :root{
@@ -214,6 +215,7 @@
       var socket = io.connect();
       var members = <%- JSON.stringify(members) %>
       var user = <%- JSON.stringify(user) %>
+      var token;
 
       socket.emit('online', user._id);
       window.addEventListener('visibilitychange', () => {
@@ -257,8 +259,7 @@
 
       function diff(timestamp){
         let diff = +new Date() - timestamp;
-             if     (diff < 1000)         return               'Now'                    ;
-        else if    (diff < 1000*60)       return    Math.round(diff/1000) + 's'         ;
+             if    (diff < 1000*60)       return                'Now'                   ;
         else if   (diff < 1000*60*60)     return   Math.round(diff/(1000*60)) + 'm'     ;
         else if  (diff < 1000*60*60*24)   return  Math.round(diff/(1000*60*60)) + 'h'   ;
         else if (diff < 1000*60*60*24*07) return Math.round(diff/(1000*60*60*24)) + 'd' ;
@@ -278,16 +279,26 @@
       }
 
       const messaging = firebase.messaging();
+
+      function getAndSendToken(){
+        messaging.requestPermission().then(async () => {
+          token = await messaging.getToken();
+          socket.emit('new-device', token);
+        }).catch(err => getAndSendToken())
+      }
+
+      messaging.onTokenRefresh(async () => {
+        let refreshed = await messaging.getToken();
+        socket.emit('update-device', {
+          old: token,
+          new: refreshed
+        })
+        token = refreshed;
+      })
+
       if (Notification.permission === 'default') {
         $('a.modal-action').click(() => {
-          messaging.requestPermission()
-          .then(function(){
-            return messaging.getToken();
-            console.log('yeah!');
-          })
-          .then(function(token){
-            console.log(token);
-          });
+          getAndSendToken();
         });
         setTimeout(() => {
           $('#turn-on-notifi').modal({
