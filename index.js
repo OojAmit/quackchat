@@ -8,7 +8,6 @@ const socket = require('socket.io');
 const Message = require('./models/message');
 const Device = require('./models/device');
 const admin = require('firebase-admin');
-const serviceAccount = require("./serviceAccountKey.json");
 const User = require('./models/user')
 
 const port = process.env.PORT || 10004;
@@ -37,6 +36,19 @@ var server = app.listen(port, () => {
 })
 
 var io = socket(server);
+
+const serviceAccount = {
+  "type": keys.firebase.admin.type,
+  "project_id": keys.firebase.admin.project_id,
+  "private_key_id": keys.firebase.admin.private_key_id,
+  "private_key": keys.firebase.admin.private_key,
+  "client_email": keys.firebase.admin.client_email,
+  "client_id": keys.firebase.admin.client_id,
+  "auth_uri": keys.firebase.admin.auth_uri,
+  "token_uri": keys.firebase.admin.token_uri,
+  "auth_provider_x509_cert_url": keys.firebase.admin.auth_provider_x509_cert_url,
+  "client_x509_cert_url": keys.firebase.admin.client_x509_cert_url
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
